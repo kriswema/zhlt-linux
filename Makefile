@@ -24,3 +24,7 @@ hlrad_:
 
 clean:
 	rm -rf build
+
+release:
+	@cd $(EXEDIR);\
+	tar cjvf zhlt.tar.bz2 hlcsg hlbsp hlvis hlrad
