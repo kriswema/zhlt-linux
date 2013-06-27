@@ -1259,13 +1259,13 @@ static void     Settings()
     {
     case eThreadPriorityNormal:
     default:
-        tmp = "Normal";
+        tmp = (char *)"Normal";
         break;
     case eThreadPriorityLow:
-        tmp = "Low";
+        tmp = (char *)"Low";
         break;
     case eThreadPriorityHigh:
-        tmp = "High";
+        tmp = (char *)"High";
         break;
     }
     Log("priority              [ %7s ] [ %7s ]\n", tmp, "Normal");
@@ -1351,7 +1351,7 @@ int             main(const int argc, char** argv)
     double          start, end;                 // start/end time log
     const char*     mapname_from_arg = NULL;    // mapname path from passed argvar
 
-    g_Program = "hlcsg";
+    g_Program = (char *)"hlcsg";
 
     if (argc == 1)
         Usage();

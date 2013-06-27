@@ -2052,13 +2052,13 @@ static void     Settings()
     {
     case eThreadPriorityNormal:
     default:
-        tmp = "Normal";
+        tmp = (char *)"Normal";
         break;
     case eThreadPriorityLow:
-        tmp = "Low";
+        tmp = (char *)"Low";
         break;
     case eThreadPriorityHigh:
-        tmp = "High";
+        tmp = (char *)"High";
         break;
     }
     Log("priority             [ %17s ] [ %17s ]\n", tmp, "Normal");
@@ -2068,16 +2068,16 @@ static void     Settings()
     switch (g_method)
     {
     default:
-        tmp = "Unknown";
+        tmp = (char *)"Unknown";
         break;
     case eMethodVismatrix:
-        tmp = "Original";
+        tmp = (char *)"Original";
         break;
     case eMethodSparseVismatrix:
-        tmp = "Sparse";
+        tmp = (char *)"Sparse";
         break;
     case eMethodNoVismatrix:
-        tmp = "NoMatrix";
+        tmp = (char *)"NoMatrix";
         break;
     }
 
@@ -2397,7 +2397,7 @@ int             main(const int argc, char** argv)
     const char*     mapname_from_arg = NULL;
     const char*     user_lights = NULL;
 
-    g_Program = "hlrad";
+    g_Program = (char *)"hlrad";
 
     if (argc == 1)
         Usage();

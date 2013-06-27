@@ -1306,13 +1306,13 @@ static void     Settings()
     {
     case eThreadPriorityNormal:
     default:
-        tmp = "Normal";
+        tmp = (char *)"Normal";
         break;
     case eThreadPriorityLow:
-        tmp = "Low";
+        tmp = (char *)"Low";
         break;
     case eThreadPriorityHigh:
-        tmp = "High";
+        tmp = (char *)"High";
         break;
     }
     Log("priority            [ %7s ] [ %7s ]\n", tmp, "Normal");
@@ -1352,7 +1352,7 @@ int             main(const int argc, char** argv)
 #ifdef ZHLT_NETVIS
     g_Program = "netvis";
 #else
-    g_Program = "hlvis";
+    g_Program = (char *)"hlvis";
 #endif
 
     if (argc == 1)

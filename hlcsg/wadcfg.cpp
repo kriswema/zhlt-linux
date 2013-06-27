@@ -199,7 +199,7 @@ bool        GetWadConfig(FILE* wadcfg, wadconfig_t* wadconfig)
     }
 
     safe_snprintf(TokenBuffer, MAX_TOKENBUFFER, "Unexptected end of file encountered while parsing configuration '%s'", wadconfig->name);
-    WadCfgParseError(TokenBuffer, g_wadcfglinecount, "(eof)");
+    WadCfgParseError(TokenBuffer, g_wadcfglinecount, (char *)"(eof)");
     return false; 
 }
 #undef MAX_TOKENBUFFER

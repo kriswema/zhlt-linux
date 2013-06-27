@@ -29,7 +29,7 @@
 #include "log.h"
 #include "filelib.h"
 
-char*           g_Program = "Uninitialized variable ::g_Program";
+char*           g_Program = (char *)"Uninitialized variable ::g_Program";
 char            g_Mapname[_MAX_PATH] = "Uninitialized variable ::g_Mapname";
 
 developer_level_t g_developer = DEFAULT_DEVELOPER;

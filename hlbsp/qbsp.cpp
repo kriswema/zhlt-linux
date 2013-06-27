@@ -1080,13 +1080,13 @@ static void     Settings()
     {
     case eThreadPriorityNormal:
     default:
-        tmp = "Normal";
+        tmp = (char *)"Normal";
         break;
     case eThreadPriorityLow:
-        tmp = "Low";
+        tmp = (char *)"Low";
         break;
     case eThreadPriorityHigh:
-        tmp = "High";
+        tmp = (char *)"High";
         break;
     }
     Log("priority            [ %7s ] [ %7s ]\n", tmp, "Normal");
@@ -1171,7 +1171,7 @@ int             main(const int argc, char** argv)
     double          start, end;
     const char*     mapname_from_arg = NULL;
 
-    g_Program = "hlbsp";
+    g_Program = (char *)"hlbsp";
 
     // if we dont have any command line argvars, print out usage and die
     if (argc == 1)
