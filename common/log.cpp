@@ -213,14 +213,14 @@ void CDECL      CloseLog()
 
 #ifdef SYSTEM_WIN32
 // AJM: fprintf/flush wasnt printing newline chars correctly (prefixed with \r) under win32
-//      due to the fact that those streams are in byte mode, so this function prefixes 
+//      due to the fact that those streams are in byte mode, so this function prefixes
 //      all \n with \r automatically.
 //      NOTE: system load may be more with this method, but there isnt that much logging going
 //      on compared to the time taken to compile the map, so its negligable.
 void            Safe_WriteLog(const char* const message)
 {
     const char* c;
-    
+
     if (!CompileLog)
         return;
 
@@ -259,7 +259,7 @@ void            WriteLog(const char* const message)
 }
 
 // =====================================================================================
-//  CheckFatal 
+//  CheckFatal
 // =====================================================================================
 void            CheckFatal()
 {
@@ -283,7 +283,7 @@ void CDECL      Error(const char* const error, ...)
     char            message[MAX_ERROR];
     char            message2[MAX_ERROR];
     va_list         argptr;
-    
+
  /*#if defined( SYSTEM_WIN32 ) && !defined( __MINGW32__ ) && !defined( __BORLANDC__ )
     {
         char* wantint3 = getenv("WANTINT3");

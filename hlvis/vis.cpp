@@ -1,12 +1,12 @@
 /*
- 
+
     VISIBLE INFORMATION SET    -aka-    V I S
 
-    Code based on original code from Valve Software, 
+    Code based on original code from Valve Software,
     Modified by Sean "Zoner" Cavanaugh (seanc@gearboxsoftware.com) with permission.
     Modified by Tony "Merl" Moore (merlinis@bigpond.net.au)
     Contains code by Skyler "Zipster" York (zipster89134@hotmail.com) - Included with permission.
-    
+
 */
 
 #pragma warning(disable: 4018) //amckern - 64bit - '<' Singed/Unsigned Mismatch
@@ -94,8 +94,8 @@ volatile bool   g_bsp_downloaded = false;       // Client variable
 volatile bool   g_prt_downloaded = false;       // Client variable
 volatile bool   g_mightsee_downloaded = false;  // Client variable
 
-char*           g_bsp_image = NULL;         // Client/Server variable : Server uses it for cache for connecting clients, clients download it to memory to not require filesystem usage 
-char*           g_prt_image = NULL;         // Client/Server variable : Server uses it for cache for connecting clients, clients download it to memory to not require filesystem usage 
+char*           g_bsp_image = NULL;         // Client/Server variable : Server uses it for cache for connecting clients, clients download it to memory to not require filesystem usage
+char*           g_prt_image = NULL;         // Client/Server variable : Server uses it for cache for connecting clients, clients download it to memory to not require filesystem usage
 unsigned long   g_bsp_compressed_size = 0;  // Server variable
 unsigned long   g_prt_compressed_size = 0;  // Server variable
 unsigned long   g_bsp_size = 0;             // Server variable
@@ -106,7 +106,7 @@ unsigned long   g_prt_size = 0;             // Server variable
 // AJM: addded in
 // =====================================================================================
 //  GetParamsFromEnt
-//      this function is called from parseentity when it encounters the 
+//      this function is called from parseentity when it encounters the
 //      info_compile_parameters entity. each tool should have its own version of this
 //      to handle its own specific settings.
 // =====================================================================================
@@ -130,7 +130,7 @@ void            GetParamsFromEnt(entity_t* mapent)
     Log("%30s [ %-9s ]\n", "Verbose Compile Messages", g_verbose ? "on" : "off");
 
     // estimate(choices) :"Estimate Compile Times?" : 0 = [ 0: "Yes" 1: "No" ]
-    if (IntForKey(mapent, "estimate")) 
+    if (IntForKey(mapent, "estimate"))
     {
         g_estimate = true;
     }
@@ -153,20 +153,20 @@ void            GetParamsFromEnt(entity_t* mapent)
     }
 
     /*
-    hlvis(choices) : "HLVIS" : 2 = 
-    [ 
+    hlvis(choices) : "HLVIS" : 2 =
+    [
         0 : "Off"
         1 : "Fast"
-        2 : "Normal" 
+        2 : "Normal"
         3 : "Full"
     ]
     */
     iTmp = IntForKey(mapent, "hlvis");
     if (iTmp == 0)
     {
-        Fatal(assume_TOOL_CANCEL, 
+        Fatal(assume_TOOL_CANCEL,
             "%s flag was not checked in info_compile_parameters entity, execution of %s cancelled", g_Program, g_Program);
-        CheckFatal();   
+        CheckFatal();
     }
     else if (iTmp == 1)
     {
@@ -183,7 +183,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         g_fullvis = true;
         g_fastvis = false;
     }
-    Log("%30s [ %-9s ]\n", "Fast VIS", g_fastvis ? "on" : "off"); 
+    Log("%30s [ %-9s ]\n", "Fast VIS", g_fastvis ? "on" : "off");
     Log("%30s [ %-9s ]\n", "Full VIS", g_fullvis ? "on" : "off" );
 
     ///////////////////
@@ -428,13 +428,13 @@ void			CompressAll(void)
 	byte	compressed[MAX_MAP_LEAFS / 8];
 
 	vismap_p = vismap;
-	
+
 	for(i = 0; i < g_portalleafs; i++)
 	{
 		memset(&compressed, 0, sizeof(compressed));
 
 		src = g_uncompressed + i * g_bitbytes;
-		
+
 		// Compress all leafs into global compression buffer
 		x = CompressVis(src, g_bitbytes, compressed, sizeof(compressed));
 
@@ -445,7 +445,7 @@ void			CompressAll(void)
 		{
 	        Error("Vismap expansion overflow");
 	    }
-	
+
 	    g_dleafs[i + 1].visofs = dest - vismap;            // leaf 0 is a common solid
 
 	    memcpy(dest, compressed, x);
@@ -621,7 +621,7 @@ static void     LeafFlow(const int leafnum)
     outbuffer[offset] |= bit;
 
     numvis = 0;
-	
+
 	for (i = 0; i < (g_portalleafs >> 3); i++)
 	{
 		byte tmp_byte = outbuffer[i];
@@ -699,11 +699,11 @@ static void     CalcVis()
     {
         g_visstate = VIS_BASE_PORTAL_VIS;
         Log("BasePortalVis: \n");
-        
+
         for (x = 0, size = g_numportals * 2; x < size; x++)
         {
             unsigned        percent = (x * 100 / size);
-            
+
             if (percent && (percent != lastpercent) && ((percent % 10) == 0))
             {
                 lastpercent = percent;
@@ -796,7 +796,7 @@ static void InitVisBlock(void)
 		fscanf_s(fp, "%s\n", g_visblockers[x].name);
 
 		fscanf_s(fp, "%d\n", &num_blocks);
-		
+
 		for(i = 0; i < num_blocks; i++)
 		{
 			fscanf_s(fp, "%s\n", g_visblockers[x].blocknames[i]);
@@ -848,7 +848,7 @@ static void		SetupVisBlockLeafs(void)
 					for(l = 0, plane = &v->planes[0]; l < v->numplanes; l++, plane++)
 					{
 						dist = DotProduct(p->winding->points[k], plane->normal) - plane->dist;
-	
+
 						if(dist > ON_EPSILON)
 							goto PostLoop;
 					}
@@ -935,7 +935,7 @@ static void     CalcVis()
 
 		// Decompress everything so we can edit it
 		DecompressAll();
-		
+
 		NamedRunThreadsOn(g_portalleafs, g_estimate, PostMaxDistVis);
 
 		// Recompress it
@@ -968,7 +968,7 @@ static void     CalcVis()
 		if(g_maxdistance)
 		{
 			totalvis = 0;
-			
+
 			Log("saving visdata to %s...\n", visdatafile);
 			SaveVisData(visdatafile);
 
@@ -978,12 +978,12 @@ static void     CalcVis()
 
 			vismap_p = g_dvisdata;
 
-			// We don't need to run BasePortalVis again			
+			// We don't need to run BasePortalVis again
 			NamedRunThreadsOn(g_portalleafs, g_estimate, MaxDistVis);
 
 			// No need to run this - MaxDistVis now writes directly to visbits after the initial VIS
 			//CalcPortalVis();
-		
+
 			for (i = 0; i < g_portalleafs; i++)
 			{
 			    LeafFlow(i);
@@ -1006,7 +1006,7 @@ static void     CalcVis()
 // =====================================================================================
 static INLINE void FASTCALL CheckNullToken(const char*const token)
 {
-    if (token == NULL) 
+    if (token == NULL)
     {
         Error("LoadPortals: Damaged or invalid .prt file\n");
     }
@@ -1040,7 +1040,7 @@ static void     LoadPortals(char* portal_image)
     {
         Error("LoadPortals: failed to read header: number of portals");
     }
-    
+
     Log("%4i portalleafs\n", g_portalleafs);
     Log("%4i numportals\n", g_numportals);
 
@@ -1274,7 +1274,7 @@ static void     Settings()
 
     if (!g_info)
     {
-        return; 
+        return;
     }
 
     Log("\n-= Current %s Settings =-\n", g_Program);
@@ -1535,7 +1535,7 @@ int             main(const int argc, char** argv)
             }
         }
 #endif
-        
+
 #ifdef HLVIS_MAXDIST
         // AJM: MVD
 		else if(!strcasecmp(argv[i], "-maxdistance"))
@@ -1772,7 +1772,7 @@ int             main(const int argc, char** argv)
     {
 
 #ifndef SYSTEM_WIN32
-        // Dont ask  . . 
+        // Dont ask  . .
         DisconnectFromServer();
 #endif
 

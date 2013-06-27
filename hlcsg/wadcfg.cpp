@@ -12,12 +12,12 @@ char *g_apppath = NULL; //JK: Stores application path
 
 #define WAD_CONFIG_FILE "wad.cfg"
 
-typedef struct wadname_s 
+typedef struct wadname_s
 {
     char                    wadname[_MAX_PATH];
     bool                    wadinclude;
     struct wadname_s*       next;
-} wadname_t; 
+} wadname_t;
 
 typedef struct wadconfig_s
 {
@@ -53,7 +53,7 @@ void        WadCfgParseError(const char* message, int linenum, char* got)
         "%s, got '%s'\n", linenum, message, got);
 
     Log("If you need help on usage of the wad.cfg file, be sure to check http://www.zhlt.info/using-wad.cfg.html that came"
-        " in the zip file with these tools.\n"); 
+        " in the zip file with these tools.\n");
 
     g_bWadConfigsLoaded = false;
 }
@@ -83,14 +83,14 @@ void        Safe_GetToken(FILE* source, char* TokenBuffer, const unsigned int Ma
 
     TokenBuffer[0] = '\0';
     ThinkChar[1] = '\0';
-    
+
     while(!feof(source))
     {
         if (strlen(TokenBuffer) >= MaxBufferLength)
             return;     // we cant add any more chars onto the buffer, its maxed out
 
-        ThinkChar[0] = fgetc(source);   
-        
+        ThinkChar[0] = fgetc(source);
+
         if (ThinkChar[0] == '\n')              // newline
         {
             g_wadcfglinecount++;
@@ -98,8 +98,8 @@ void        Safe_GetToken(FILE* source, char* TokenBuffer, const unsigned int Ma
         }
 
         if (ThinkChar[0] == 'ÿ')
-            return;  
-                
+            return;
+
         if (IsWhitespace(ThinkChar[0]) && !InToken)
             continue;   // whitespace before token, ignore
 
@@ -112,8 +112,8 @@ void        Safe_GetToken(FILE* source, char* TokenBuffer, const unsigned int Ma
             continue;   // dont include quotes
         }
 
-        if (ThinkChar[0] == '/')             
-        {   
+        if (ThinkChar[0] == '/')
+        {
             sourcepos = ftell(source);
             // might be a comment, see if the next char is a forward slash
             if (fgetc(source) == '/')    // if it is, were in a comment
@@ -133,7 +133,7 @@ void        Safe_GetToken(FILE* source, char* TokenBuffer, const unsigned int Ma
            )
         {
             //printf("[gt: %s]\n", TokenBuffer);
-            return;   
+            return;
         }
 
         if (!InComment)
@@ -161,7 +161,7 @@ bool        GetWadConfig(FILE* wadcfg, wadconfig_t* wadconfig)
 
         if (!strcmp(TokenBuffer, "}"))
             return true; // no more work to do
-        
+
         if (!strcmp(TokenBuffer, ";"))
             continue; // old seperator, no longer used but here for backwards compadibility
 
@@ -182,9 +182,9 @@ bool        GetWadConfig(FILE* wadcfg, wadconfig_t* wadconfig)
             current->wadinclude = true;
             Safe_GetToken(wadcfg, TokenBuffer, MAX_TOKENBUFFER);
         }
-        
+
         strcpy_s(current->wadname, TokenBuffer);
-        
+
         if (!wadconfig->firstentry)
         {
             wadconfig->firstentry = current;
@@ -200,7 +200,7 @@ bool        GetWadConfig(FILE* wadcfg, wadconfig_t* wadconfig)
 
     safe_snprintf(TokenBuffer, MAX_TOKENBUFFER, "Unexptected end of file encountered while parsing configuration '%s'", wadconfig->name);
     WadCfgParseError(TokenBuffer, g_wadcfglinecount, (char *)"(eof)");
-    return false; 
+    return false;
 }
 #undef MAX_TOKENBUFFER
 
@@ -224,7 +224,7 @@ void        LoadWadConfigFile()
     {
         char    appdir[_MAX_PATH];
         char    tmp[_MAX_PATH];
-                
+
         memset(tmp, 0, sizeof(tmp));
         memset(appdir, 0, sizeof(appdir));
 
@@ -235,7 +235,7 @@ void        LoadWadConfigFile()
         #else
         safe_strncpy(tmp, g_apppath, _MAX_PATH);
         #endif
-    
+
         ExtractFilePath(tmp, appdir);
         safe_snprintf(tmp, _MAX_PATH, "%s%s", appdir, WAD_CONFIG_FILE);
 
@@ -253,14 +253,14 @@ void        LoadWadConfigFile()
                 DWORD       dwType, dwSize;
 
                 // REG: create machinekey
-                RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Valve\\Half-Life"), 0, NULL,  
+                RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Valve\\Half-Life"), 0, NULL,
                                                         0, 0, NULL, &HLMachineKey, &disposition);
-                // REG: get hl dir 
+                // REG: get hl dir
                 dwType = REG_SZ;
                 dwSize = _MAX_PATH;
                 RegQueryValueEx(HLMachineKey, TEXT("InstallPath"), NULL, &dwType, (PBYTE)&appdir, &dwSize);
             }
-            
+
             safe_strncpy(tmp, appdir, _MAX_PATH);
             safe_strncat(tmp, SYSTEM_SLASH_STR, _MAX_PATH); // system slash pointless as this will only work on win32, but anyway...
             safe_strncat(tmp, WAD_CONFIG_FILE, _MAX_PATH);
@@ -298,7 +298,7 @@ void        LoadWadConfigFile()
 
         if (!strcmp(temp, "HalfLifePath="))  // backwards compadibitly
         {
-            Safe_GetToken(wadcfg, temp, MAX_WAD_CFG_NAME); 
+            Safe_GetToken(wadcfg, temp, MAX_WAD_CFG_NAME);
             Warning("Redundant line in " WAD_CONFIG_FILE ": \"HalfLifePath= %s\" - Ignoring...\n",
                 temp);
             continue;
@@ -406,12 +406,12 @@ void        ProcessWadConfiguration()
         if (!config)
             break;
     }
-    
+
     if (usedwads)
     {
         Log("Using custom wadfile configuration: '%s' (with %i wad%s)\n", wadconfigname, usedwads, usedwads > 1 ? "s" : "");
         SetKeyValue(&g_entities[0], "wad", szTmp);
-        SetKeyValue(&g_entities[0], "_wad", szTmp);    
+        SetKeyValue(&g_entities[0], "_wad", szTmp);
     }
     else
     {

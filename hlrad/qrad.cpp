@@ -1,11 +1,11 @@
 /*
- 
-    R A D I O S I T Y    -aka-    R A D 
 
-    Code based on original code from Valve Software, 
+    R A D I O S I T Y    -aka-    R A D
+
+    Code based on original code from Valve Software,
     Modified by Sean "Zoner" Cavanaugh (seanc@gearboxsoftware.com) with permission.
     Modified by Tony "Merl" Moore (merlinis@bigpond.net.au) [AJM]
-    
+
 */
 
 #ifdef SYSTEM_WIN32
@@ -132,7 +132,7 @@ int             nodeparents[MAX_MAP_NODES];
 #ifdef ZHLT_INFO_COMPILE_PARAMETERS
 // =====================================================================================
 //  GetParamsFromEnt
-//      this function is called from parseentity when it encounters the 
+//      this function is called from parseentity when it encounters the
 //      info_compile_parameters entity. each tool should have its own version of this
 //      to handle its own specific settings.
 // =====================================================================================
@@ -168,7 +168,7 @@ void            GetParamsFromEnt(entity_t* mapent)
     Log("%30s [ %-9s ]\n", "Verbose Compile Messages", g_verbose ? "on" : "off");
 
     // estimate(choices) :"Estimate Compile Times?" : 0 = [ 0: "Yes" 1: "No" ]
-    if (IntForKey(mapent, "estimate")) 
+    if (IntForKey(mapent, "estimate"))
     {
         g_estimate = true;
     }
@@ -190,7 +190,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         Log("%30s [ %-9s ]\n", "Thread Priority", "low");
     }
 
-    // bounce(integer) : "Number of radiosity bounces" : 0 
+    // bounce(integer) : "Number of radiosity bounces" : 0
     iTmp = IntForKey(mapent, "bounce");
     if (iTmp)
     {
@@ -208,23 +208,23 @@ void            GetParamsFromEnt(entity_t* mapent)
 	}
 	Log("%30s [ %-9s ]\n", "Bounce dynamic lights", g_bounce_dynamic ? "on" : "off");
 
-    
+
 #ifdef HLRAD_HULLU
     iTmp = IntForKey(mapent, "customshadowwithbounce");
     if (iTmp)
-    {  
+    {
     	g_customshadow_with_bouncelight = true;
     	Log("%30s [ %-9s ]\n", "Custom Shadow with Bounce Light", ValueForKey(mapent, "customshadowwithbounce"));
     }
     iTmp = IntForKey(mapent, "rgbtransfers");
     if (iTmp)
-    {  
+    {
     	g_rgb_transfers = true;
     	Log("%30s [ %-9s ]\n", "RGB Transfers", ValueForKey(mapent, "rgbtransfers"));
     }
 #endif
 
-    // ambient(string) : "Ambient world light (0.0 to 1.0, R G B)" : "0 0 0" 
+    // ambient(string) : "Ambient world light (0.0 to 1.0, R G B)" : "0 0 0"
     //vec3_t          g_ambient = { DEFAULT_AMBIENT_RED, DEFAULT_AMBIENT_GREEN, DEFAULT_AMBIENT_BLUE };
     pszTmp = ValueForKey(mapent, "ambient");
     if (pszTmp)
@@ -261,7 +261,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         }
     }
 
-    // smooth(integer) : "Smoothing threshold (in degrees)" : 0 
+    // smooth(integer) : "Smoothing threshold (in degrees)" : 0
     flTmp = FloatForKey(mapent, "smooth");
     if (flTmp)
     {
@@ -269,7 +269,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         Log("%30s [ %-9s ]\n", "Smoothing threshold", ValueForKey(mapent, "smooth"));
     }
 
-    // dscale(integer) : "Direct Lighting Scale" : 1 
+    // dscale(integer) : "Direct Lighting Scale" : 1
     flTmp = FloatForKey(mapent, "dscale");
     if (flTmp)
     {
@@ -277,7 +277,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         Log("%30s [ %-9s ]\n", "Direct Lighting Scale", ValueForKey(mapent, "dscale"));
     }
 
-    // chop(integer) : "Chop Size" : 64 
+    // chop(integer) : "Chop Size" : 64
     iTmp = IntForKey(mapent, "chop");
     if (iTmp)
     {
@@ -285,7 +285,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         Log("%30s [ %-9s ]\n", "Chop Size", ValueForKey(mapent, "chop"));
     }
 
-    // texchop(integer) : "Texture Light Chop Size" : 32 
+    // texchop(integer) : "Texture Light Chop Size" : 32
     flTmp = FloatForKey(mapent, "texchop");
     if (flTmp)
     {
@@ -293,7 +293,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         Log("%30s [ %-9s ]\n", "Texture Light Chop Size", ValueForKey(mapent, "texchop"));
     }
 
-    /* 
+    /*
     hlrad(choices) : "HLRAD" : 0 =
     [
         0 : "Off"
@@ -304,9 +304,9 @@ void            GetParamsFromEnt(entity_t* mapent)
     iTmp = IntForKey(mapent, "hlrad");
     if (iTmp == 0)
     {
-        Fatal(assume_TOOL_CANCEL, 
+        Fatal(assume_TOOL_CANCEL,
             "%s flag was not checked in info_compile_parameters entity, execution of %s cancelled", g_Program, g_Program);
-        CheckFatal();  
+        CheckFatal();
     }
     else if (iTmp == 1)
     {
@@ -317,7 +317,7 @@ void            GetParamsFromEnt(entity_t* mapent)
         g_extra = true;
     }
     Log("%30s [ %-9s ]\n", "Extra RAD", g_extra ? "on" : "off");
- 
+
     /*
     sparse(choices) : "Vismatrix Method" : 2 =
     [
@@ -1202,7 +1202,7 @@ static void     MakePatches()
         lightmode = eModelLightmodeNull;
 
 #ifdef HLRAD_OPACITY // AJM
-        float         l_opacity = 0.0f; // decimal percentage 
+        float         l_opacity = 0.0f; // decimal percentage
 #endif
 
         mod = g_dmodels + i;
@@ -1270,7 +1270,7 @@ static void     MakePatches()
 	// Check for colored transparency/custom shadows
         VectorFill(d_transparency, 1.0);
         b_transparency = false;
-        
+
         if (*(s = ValueForKey(ent, "zhlt_customshadow")))
         {
         	double r1 = 1.0, g1 = 1.0, b1 = 1.0, tmp = 1.0;
@@ -1279,7 +1279,7 @@ static void     MakePatches()
         		if(r1<0.0) r1 = 0.0;
         		if(g1<0.0) g1 = 0.0;
         		if(b1<0.0) b1 = 0.0;
-        		
+
         		d_transparency[0] = r1;
         		d_transparency[1] = g1;
         		d_transparency[2] = b1;
@@ -1288,7 +1288,7 @@ static void     MakePatches()
         	else if (sscanf_s(s, "%lf", &tmp) == 1) //Greyscale version
         	{
         		if(tmp<0.0) tmp = 0.0;
-        		
+
         		VectorFill(d_transparency, tmp);
         		b_transparency = true;
         	}
@@ -1300,7 +1300,7 @@ static void     MakePatches()
             VectorSubtract(light_origin, model_center, origin);
         }
 
-#ifdef ZHLT_TEXLIGHT        
+#ifdef ZHLT_TEXLIGHT
 		//LRC:
 		/* ummmmm..... something is very, very wrong here. */
 		if (*(s = ValueForKey(ent, "style")))
@@ -1334,9 +1334,9 @@ static void     MakePatches()
                 if (lightmode & eModelLightmodeOpaque)
                 {
 #ifdef HLRAD_HULLU
-                    AddFaceToOpaqueList(fn, w, d_transparency, b_transparency); 
+                    AddFaceToOpaqueList(fn, w, d_transparency, b_transparency);
 #else
-                    AddFaceToOpaqueList(fn, w); 
+                    AddFaceToOpaqueList(fn, w);
 #endif
                 }
             }
@@ -1580,8 +1580,8 @@ static void     GatherLight(int threadnum)
 					if (m == MAXLIGHTMAPS)
 					{
 						if(!g_warned_direct || g_verbose)
-						{ 
-							Warning("Too many light styles on a face(%f,%f,%f)",patch->origin[0],patch->origin[1],patch->origin[2]); 
+						{
+							Warning("Too many light styles on a face(%f,%f,%f)",patch->origin[0],patch->origin[1],patch->origin[2]);
 							g_warned_direct = true;
 						}
 					}
@@ -1702,8 +1702,8 @@ static void     GatherRGBLight(int threadnum)
 					if (m == MAXLIGHTMAPS)
 					{
 						if(!g_warned_direct || g_verbose)
-						{ 
-							Warning("Too many light styles on a face(%f,%f,%f)",patch->origin[0],patch->origin[1],patch->origin[2]); 
+						{
+							Warning("Too many light styles on a face(%f,%f,%f)",patch->origin[0],patch->origin[1],patch->origin[2]);
 							g_warned_direct = true;
 						}
 					}
@@ -2000,8 +2000,8 @@ static void     Usage()
     //Log("-= End of unofficial features! =-\n\n" );
 
 #endif
-    // ------------------------------------------------------------------------  
-    
+    // ------------------------------------------------------------------------
+
 #ifdef HLRAD_HULLU
     Log("   -customshadowwithbounce : Enables custom shadows with bounce light\n");
     Log("   -rgbtransfers           : Enables RGB Transfers (for custom shadows)\n\n");
@@ -2126,7 +2126,7 @@ static void     Settings()
     safe_snprintf(buf2, sizeof(buf2), "%3.3f", DEFAULT_FADE);
     Log("global fade          [ %17s ] [ %17s ]\n", buf1, buf2);
     Log("global falloff       [ %17d ] [ %17d ]\n", g_falloff, DEFAULT_FALLOFF);
-    
+
     // ------------------------------------------------------------------------
     // Changes by Adam Foster - afoster@compsoc.man.ac.uk
     // replaces the old stuff for displaying current values for gamma and lightscale
@@ -2188,7 +2188,7 @@ static void     Settings()
     Log("\n");
     Log("custom shadows with bounce light\n"
         "                     [ %17s ] [ %17s ]\n", g_customshadow_with_bouncelight ? "on" : "off", DEFAULT_CUSTOMSHADOW_WITH_BOUNCELIGHT ? "on" : "off");
-    Log("rgb transfers        [ %17s ] [ %17s ]\n", g_rgb_transfers ? "on" : "off", DEFAULT_RGB_TRANSFERS ? "on" : "off"); 
+    Log("rgb transfers        [ %17s ] [ %17s ]\n", g_rgb_transfers ? "on" : "off", DEFAULT_RGB_TRANSFERS ? "on" : "off");
 #endif
     Log("\n\n");
 }
@@ -2197,7 +2197,7 @@ static void     Settings()
 // AJM: added in
 // =====================================================================================
 //  ReadInfoTexlights
-//      try and parse texlight info from the info_texlights entity 
+//      try and parse texlight info from the info_texlights entity
 // =====================================================================================
 void            ReadInfoTexlights()
 {
@@ -2212,7 +2212,7 @@ void            ReadInfoTexlights()
     for (k = 0; k < g_numentities; k++)
     {
         mapent = &g_entities[k];
-        
+
         if (strcmp(ValueForKey(mapent, "classname"), "info_texlights"))
             continue;
 
@@ -2220,15 +2220,15 @@ void            ReadInfoTexlights()
 
         for (ep = mapent->epairs; ep; ep = ep->next)
         {
-            if (    !strcmp(ep->key, "classname") 
+            if (    !strcmp(ep->key, "classname")
                  || !strcmp(ep->key, "origin")
                )
                 continue; // we dont care about these keyvalues
 
             values = sscanf_s(ep->value, "%f %f %f %f", &r, &g, &b, &i);
-            
+
             if (values == 1)
-            {  
+            {
                 g = b = r;
             }
             else if (values == 4) // use brightness value.
@@ -2315,7 +2315,7 @@ void            LoadRadFiles(const char* const mapname, const char* const user_r
             }
         }
     }
-   
+
     // Look for mapname.rad in mapdir
     safe_strncpy(mapname_lights, mapdir, _MAX_PATH);
     safe_strncat(mapname_lights, mapfile, _MAX_PATH);
@@ -2962,7 +2962,7 @@ int             main(const int argc, char** argv)
     ParseEntities();
     Settings();
     LoadRadFiles(g_Mapname, user_lights, argv[0]);
-    
+
     if (!g_visdatasize)
     {
         Warning("No vis information, direct lighting only.");

@@ -1,16 +1,16 @@
 #pragma warning(disable: 4018) // '<' : signed/unsigned mismatch
 
 /*
- 
-    CONSTRUCTIVE SOLID GEOMETRY    -aka-    C S G 
 
-    Code based on original code from Valve Software, 
+    CONSTRUCTIVE SOLID GEOMETRY    -aka-    C S G
+
+    Code based on original code from Valve Software,
     Modified by Sean "Zoner" Cavanaugh (seanc@gearboxsoftware.com) with permission.
     Modified by Tony "Merl" Moore (merlinis@bigpond.net.au) [AJM]
-    
+
 */
 
-#include "csg.h" 
+#include "csg.h"
 
 /*
 
@@ -21,8 +21,8 @@
 
 */
 
-static FILE*    out[NUM_HULLS]; // pointer to each of the hull out files (.p0, .p1, ect.)  
-static int      c_tiny;        
+static FILE*    out[NUM_HULLS]; // pointer to each of the hull out files (.p0, .p1, ect.)
+static int      c_tiny;
 static int      c_tiny_clip;
 static int      c_outfaces;
 static int      c_csgfaces;
@@ -33,7 +33,7 @@ char            wadconfigname[MAX_WAD_CFG_NAME];
 #endif
 
 vec_t           g_tiny_threshold = DEFAULT_TINY_THRESHOLD;
-     
+
 bool            g_noclip = DEFAULT_NOCLIP;              // no clipping hull "-noclip"
 bool            g_onlyents = DEFAULT_ONLYENTS;          // onlyents mode "-onlyents"
 bool            g_wadtextures = DEFAULT_WADTEXTURES;    // "-nowadtextures"
@@ -97,7 +97,7 @@ void            GetParamsFromEnt(entity_t* mapent)
     Log("%30s [ %-9s ]\n", "Verbose Compile Messages", g_verbose ? "on" : "off");
 
     // estimate(choices) :"Estimate Compile Times?" : 0 = [ 0: "Yes" 1: "No" ]
-    if (IntForKey(mapent, "estimate")) 
+    if (IntForKey(mapent, "estimate"))
     {
         g_estimate = true;
     }
@@ -138,7 +138,7 @@ void            GetParamsFromEnt(entity_t* mapent)
 #ifdef HLCSG_AUTOWAD
     // wadautodetect(choices) : "Wad Auto Detect" : 0 =	[ 0 : "Off" 1 : "On" ]
     if (!strcmp(ValueForKey(mapent, "wadautodetect"), "1"))
-    { 
+    {
         g_bWadAutoDetect = true;
     }
     else
@@ -151,7 +151,7 @@ void            GetParamsFromEnt(entity_t* mapent)
 #ifdef HLCSG_WADCFG
 	// wadconfig(string) : "Custom Wad Configuration" : ""
     if (strlen(ValueForKey(mapent, "wadconfig")) > 0)
-    { 
+    {
         safe_strncpy(wadconfigname, ValueForKey(mapent, "wadconfig"), MAX_WAD_CFG_NAME);
         Log("%30s [ %-9s ]\n", "Custom Wad Configuration", wadconfigname);
     }
@@ -167,7 +167,7 @@ void            GetParamsFromEnt(entity_t* mapent)
     else if (iTmp == 0)
     {
         g_bClipNazi = false;
-    }        
+    }
     Log("%30s [ %-9s ]\n", "Clipnode Economy Mode", g_bClipNazi ? "on" : "off");
 #endif
 
@@ -187,9 +187,9 @@ void            GetParamsFromEnt(entity_t* mapent)
     }
     else if (iTmp == 0)
     {
-        Fatal(assume_TOOL_CANCEL, 
+        Fatal(assume_TOOL_CANCEL,
             "%s was set to \"Off\" (0) in info_compile_parameters entity, execution cancelled", g_Program);
-        CheckFatal();  
+        CheckFatal();
     }
     Log("%30s [ %-9s ]\n", "Onlyents", g_onlyents ? "on" : "off");
 
@@ -205,7 +205,7 @@ void            GetParamsFromEnt(entity_t* mapent)
     {
         g_noclip = true;
     }
-    else 
+    else
     {
         g_noclip = false;
     }
@@ -245,7 +245,7 @@ void            GetParamsFromEnt(entity_t* mapent)
     {
         g_skyclip = false;
     }
-    else 
+    else
     {
         g_skyclip = true;
     }
@@ -298,7 +298,7 @@ void            FreeFace(bface_t* f)
 
 // =====================================================================================
 //  ClipFace
-//      Clips a faces by a plane, returning the fragment on the backside and adding any 
+//      Clips a faces by a plane, returning the fragment on the backside and adding any
 //      fragment to the outside.
 //      Faces exactly on the plane will stay inside unless overdrawn by later brush.
 //      Frontside is the side of the plane that holds the outside list.
@@ -314,11 +314,11 @@ static bface_t* ClipFace(bface_t* f, bface_t** outside, const int splitplane, co
 
     // handle exact plane matches special
 
-    if (f->planenum == (splitplane ^ 1)) 
+    if (f->planenum == (splitplane ^ 1))
         return f;    // opposite side, so put on inside list
 
     if (f->planenum == splitplane)  // coplanar
-    {       
+    {
         // this fragment will go to the inside, because
         //   the earlier one was clipped to the outside
         if (precedence)
@@ -347,16 +347,16 @@ static bface_t* ClipFace(bface_t* f, bface_t** outside, const int splitplane, co
     else
     {
         delete f->w;
-    
+
         front = NewFaceFromFace(f);
         front->w = fw;
         fw->getBounds(front->bounds);
         front->next = *outside;
         *outside = front;
-    
+
         f->w = bw;
         bw->getBounds(f->bounds);
-    
+
         return f;
     }
 }
@@ -394,9 +394,9 @@ void            WriteFace(const int hull, const bface_t* const f)
 
 // =====================================================================================
 //  SaveOutside
-//      The faces remaining on the outside list are final polygons.  Write them to the 
+//      The faces remaining on the outside list are final polygons.  Write them to the
 //      output file.
-//      Passable contents (water, lava, etc) will generate a mirrored copy of the face 
+//      Passable contents (water, lava, etc) will generate a mirrored copy of the face
 //      to be seen from the inside.
 // =====================================================================================
 static void     SaveOutside(const brush_t* const b, const int hull, bface_t* outside, const int mirrorcontents)
@@ -517,11 +517,11 @@ void            FreeFaceList(bface_t* f)
 
 // =====================================================================================
 //  CopyFacesToOutside
-//      Make a copy of all the faces of the brush, so they can be chewed up by other 
+//      Make a copy of all the faces of the brush, so they can be chewed up by other
 //      brushes.
 //      All of the faces start on the outside list.
-//      As other brushes take bites out of the faces, the fragments are moved to the 
-//      inside list, so they can be freed when they are determined to be completely 
+//      As other brushes take bites out of the faces, the fragments are moved to the
+//      inside list, so they can be freed when they are determined to be completely
 //      enclosed in solid.
 // =====================================================================================
 static bface_t* CopyFacesToOutside(brushhull_t* bh)
@@ -581,7 +581,7 @@ static void     CSGBrush(int brushnum)
         for (bn = 0; bn < e->numbrushes; bn++)
         {
             // see if b2 needs to clip a chunk out of b1
-            if (bn == brushnum)  
+            if (bn == brushnum)
             {
                 overwrite = true;                          // later brushes now overwrite
                 continue;
@@ -736,7 +736,7 @@ static void     SetModelNumbers()
 // =====================================================================================
 //  SetLightStyles
 // =====================================================================================
-#define	MAX_SWITCHED_LIGHTS	    32 
+#define	MAX_SWITCHED_LIGHTS	    32
 #define MAX_LIGHTTARGETS_NAME   64
 
 static void     SetLightStyles()
@@ -907,8 +907,8 @@ static void     CopyGenerictoCLIP(const brush_t* const b)
 }
 
 #ifdef HLCSG_CLIPECONOMY
-// AJM: added in 
-unsigned int    BrushClipHullsDiscarded = 0; 
+// AJM: added in
+unsigned int    BrushClipHullsDiscarded = 0;
 unsigned int    ClipNodesDiscarded = 0;
 
 //AJM: added in function
@@ -920,7 +920,7 @@ static void     MarkEntForNoclip(entity_t*  ent)
     for (i = ent->firstbrush; i < ent->firstbrush + ent->numbrushes; i++)
     {
         b = &g_mapbrushes[i];
-        b->noclip = 1;  
+        b->noclip = 1;
 
         BrushClipHullsDiscarded++;
         ClipNodesDiscarded += b->numsides;
@@ -937,18 +937,18 @@ static void     CheckForNoClip()
     int             i;
     entity_t*       ent;
 
-    char            entclassname[MAX_KEY]; 
+    char            entclassname[MAX_KEY];
     int             spawnflags;
 
-    if (!g_bClipNazi) 
+    if (!g_bClipNazi)
         return; // NO CLIP FOR YOU!!!
 
     for (i = 0; i < g_numentities; i++)
     {
-        if (!g_entities[i].numbrushes) 
+        if (!g_entities[i].numbrushes)
             continue; // not a model
 
-        if (!i) 
+        if (!i)
             continue; // dont waste our time with worldspawn
 
         ent = &g_entities[i];
@@ -958,48 +958,48 @@ static void     CheckForNoClip()
 
 		// condition 0, it's marked noclip (KGP)
 		if(strlen(ValueForKey(ent,"zhlt_noclip")) && strcmp(ValueForKey(ent,"zhlt_noclip"),"0"))
-		{ 
+		{
 			MarkEntForNoclip(ent);
 		}
-        // condition 1, its a func_illusionary 
-		else if (!strncasecmp(entclassname,      "func_illusionary", 16))  
+        // condition 1, its a func_illusionary
+		else if (!strncasecmp(entclassname,      "func_illusionary", 16))
         {
             MarkEntForNoclip(ent);
         }
-        // condition 2, flag 4 (8) is set and it is either a func_door, func_train, momentary_door, 
-        //  func_door_rotating or func_tracktrain (passable, not-solid flag )        
+        // condition 2, flag 4 (8) is set and it is either a func_door, func_train, momentary_door,
+        //  func_door_rotating or func_tracktrain (passable, not-solid flag )
         else if (    (spawnflags & 8)
-                     && 
+                     &&
                      (   /* NOTE: func_doors as far as i can tell may need clipnodes for their
                             player collision detection, so for now, they stay out of it. */
                           (!strncasecmp(entclassname, "func_train",         10))
-                       || (!strncasecmp(entclassname, "func_door",           9)) 
+                       || (!strncasecmp(entclassname, "func_door",           9))
                   //   || (!strncasecmp(entclassname, "momentary_door",     14))
                   //   || (!strncasecmp(entclassname, "func_door_rotating", 18))
                        || (!strncasecmp(entclassname, "func_tracktrain",    15))
                      )
-                ) 
-        {
-            MarkEntForNoclip(ent);
-        } 
-        // condition 3: flag 2 (2) is set, and its a func_conveyor (not solid flag)  
-        else if ( (spawnflags & 2) && (!strncasecmp(entclassname, "func_conveyor", 13)) ) 
+                )
         {
             MarkEntForNoclip(ent);
         }
-        // condition 4: flag 1 (1) is set, and its a func_rot_button (not solid flag)     
+        // condition 3: flag 2 (2) is set, and its a func_conveyor (not solid flag)
+        else if ( (spawnflags & 2) && (!strncasecmp(entclassname, "func_conveyor", 13)) )
+        {
+            MarkEntForNoclip(ent);
+        }
+        // condition 4: flag 1 (1) is set, and its a func_rot_button (not solid flag)
         else if ( (spawnflags & 1) && (!strncasecmp(entclassname, "func_rot_button", 15)) )
         {
             MarkEntForNoclip(ent);
         }
-        // condition 5: flag 7 (64) is set, and its a func_rotating                     
+        // condition 5: flag 7 (64) is set, and its a func_rotating
         else if ( (spawnflags & 64) && (!strncasecmp(entclassname, "func_rotating", 13)) )
         {
             MarkEntForNoclip(ent);
-        }            
+        }
         /*
-        // condition 6: its a func_wall, while we noclip it, we remake the clipnodes manually 
-        else if (!strncasecmp(entclassname, "func_wall", 9)) 
+        // condition 6: its a func_wall, while we noclip it, we remake the clipnodes manually
+        else if (!strncasecmp(entclassname, "func_wall", 9))
         {
             for (int j = ent->firstbrush; j < ent->firstbrush + ent->numbrushes; j++)
                 CopyGenerictoCLIP(&g_mapbrushes[i]);
@@ -1017,8 +1017,8 @@ static void     CheckForNoClip()
 //  ProcessModels
 // =====================================================================================
 #define NUM_TYPECONTENTS    5 // AJM: should reflect the number of values below
-int typecontents[NUM_TYPECONTENTS] = { 
-    CONTENTS_WATER, CONTENTS_SLIME, CONTENTS_LAVA, CONTENTS_SKY, CONTENTS_HINT 
+int typecontents[NUM_TYPECONTENTS] = {
+    CONTENTS_WATER, CONTENTS_SLIME, CONTENTS_LAVA, CONTENTS_SKY, CONTENTS_HINT
 };
 
 
@@ -1043,7 +1043,7 @@ static void     ProcessModels()
             for (j = placed + 1; j < g_entities[i].numbrushes; j++)     // for each of the model's brushes
             {
                 // if this brush is of the contents type in this for iteration
-                if (g_mapbrushes[first + j].contents == contents)       
+                if (g_mapbrushes[first + j].contents == contents)
                 {
                     temp = g_mapbrushes[first + placed];
                     g_mapbrushes[first + placed] = g_mapbrushes[j];
@@ -1143,13 +1143,13 @@ static void     BoundWorld()
 // =====================================================================================
 static void     Usage()
 {
-    Banner(); // TODO: Call banner from main CSG process? 
+    Banner(); // TODO: Call banner from main CSG process?
 
     Log("\n-= %s Options =-\n\n", g_Program);
     Log("    -nowadtextures   : include all used textures into bsp\n");
     Log("    -wadinclude file : place textures used from wad specified into bsp\n");
     Log("    -noclip          : don't create clipping hull\n");
-    
+
 #ifdef HLCSG_CLIPECONOMY    // AJM
     Log("    -noclipeconomy   : turn clipnode economy mode off\n");
 #endif
@@ -1230,7 +1230,7 @@ static void     Settings()
     char*           tmp;
 
     if (!g_info)
-        return; 
+        return;
 
     Log("\nCurrent %s Settings\n", g_Program);
     Log("Name                 |  Setting  |  Default\n"
@@ -1346,8 +1346,8 @@ void            CSGCleanup()
 // =====================================================================================
 int             main(const int argc, char** argv)
 {
-    int             i;                          
-    char            name[_MAX_PATH];            // mapanme 
+    int             i;
+    char            name[_MAX_PATH];            // mapanme
     double          start, end;                 // start/end time log
     const char*     mapname_from_arg = NULL;    // mapname path from passed argvar
 
@@ -1357,7 +1357,7 @@ int             main(const int argc, char** argv)
         Usage();
 
     // Hard coded list of -wadinclude files, used for HINT texture brushes so lazy
-    // mapmakers wont cause beta testers (or possibly end users) to get a wad 
+    // mapmakers wont cause beta testers (or possibly end users) to get a wad
     // error on zhlt.wad etc
     g_WadInclude.push_back("zhlt.wad");
 
@@ -1491,7 +1491,7 @@ int             main(const int argc, char** argv)
 #ifdef HLCSG_WADCFG
         // AJM: added in -wadconfig
         else if (!strcasecmp(argv[i], "-wadconfig"))
-        { 
+        {
             if (i < argc)
             {
                 safe_strncpy(wadconfigname, argv[++i], MAX_WAD_CFG_NAME);
@@ -1539,7 +1539,7 @@ int             main(const int argc, char** argv)
 
 #ifdef HLCSG_AUTOWAD // AJM
         else if (!strcasecmp(argv[i], "-wadautodetect"))
-        { 
+        {
             g_bWadAutoDetect = true;
         }
 #endif
@@ -1680,13 +1680,13 @@ int             main(const int argc, char** argv)
         ResetTmpFiles();
 
     // other stuff
-    ResetErrorLog();                     
-    ResetLog();                          
-    OpenLog(g_clientid);                  
-    atexit(CloseLog);                       
-    LogStart(argc, argv);                   
+    ResetErrorLog();
+    ResetLog();
+    OpenLog(g_clientid);
+    atexit(CloseLog);
+    LogStart(argc, argv);
     atexit(CSGCleanup); // AJM
-    dtexdata_init();                        
+    dtexdata_init();
     atexit(dtexdata_free);
 
     // START CSG
@@ -1694,7 +1694,7 @@ int             main(const int argc, char** argv)
     //  before settings are finalised and printed out, so that the info_compile_parameters
     //  entity can be dealt with effectively
     start = I_FloatTime();
-    
+
     LoadHullfile(g_hullfile);               // if the user specified a hull file, load it now
 #ifdef HLCSG_NULLIFY_INVISIBLE
 	if(g_bUseNullTex)
@@ -1702,10 +1702,10 @@ int             main(const int argc, char** argv)
 #endif
     safe_strncpy(name, mapname_from_arg, _MAX_PATH); // make a copy of the nap name
     DefaultExtension(name, ".map");                  // might be .reg
-    
+
     LoadMapFile(name);
-    ThreadSetDefault();                    
-    ThreadSetPriority(g_threadpriority);  
+    ThreadSetDefault();
+    ThreadSetPriority(g_threadpriority);
     Settings();
 
 
@@ -1723,7 +1723,7 @@ int             main(const int argc, char** argv)
     if (!g_bWadConfigsLoaded)  // dont try and override wad.cfg
 #endif
     {
-        GetUsedWads(); 
+        GetUsedWads();
     }
 
 #ifdef HLCSG_AUTOWAD
@@ -1764,7 +1764,7 @@ int             main(const int argc, char** argv)
     }
 
 #ifdef HLCSG_CLIPECONOMY // AJM
-    CheckForNoClip(); 
+    CheckForNoClip();
 #endif
 
     // createbrush
@@ -1798,7 +1798,7 @@ int             main(const int argc, char** argv)
 
         out[i] = fopen(name, "w");
 
-        if (!out[i]) 
+        if (!out[i])
             Error("Couldn't open %s", name);
     }
 
@@ -1809,7 +1809,7 @@ int             main(const int argc, char** argv)
     Verbose("%5i tiny faces\n", c_tiny);
     Verbose("%5i tiny clips\n", c_tiny_clip);
 
-    // close hull files 
+    // close hull files
     for (i = 0; i < NUM_HULLS; i++)
         fclose(out[i]);
 
@@ -1833,7 +1833,7 @@ int             main(const int argc, char** argv)
 
         Log(
         "%3i (%4.0f, %4.0f, %4.0f) (%4.0f, %4.0f, %4.0f) (%5.0f) %i\n",
-        i,     
+        i,
         p->normal[1], p->normal[2], p->normal[3],
         p->origin[1], p->origin[2], p->origin[3],
         p->dist,
