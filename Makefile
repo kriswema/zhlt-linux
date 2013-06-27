@@ -3,6 +3,7 @@ CXXFLAGS=-pthread -DNDEBUG -DHAVE_CONFIG_H -DHLCSG -DSTDC_HEADERS -D_CONSOLE -DS
 INCLUDES=-Icommon -Itemplate
 LIBPATH=-Lcommon
 EXEDIR=build
+GLOBAL_BINARIES_DIR = /usr/bin/
 
 all: hlcsg_ hlbsp_ hlvis_ hlrad_
 
@@ -24,3 +25,10 @@ hlrad_:
 
 clean:
 	rm -rf build
+
+install:
+	cp $(EXEDIR)/* $(GLOBAL_BINARIES_DIR)
+
+release:
+	@cd $(EXEDIR);\
+	tar cjvf zhlt.tar.bz2 hlcsg hlbsp hlvis hlrad
