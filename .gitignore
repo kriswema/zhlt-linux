@@ -1,2 +1,12 @@
 *.o
 /bin/
+/hlbsp/release/
+/hlbsp/x64/
+/hlcsg/release/
+/hlcsg/x64/
+/hlrad/release/
+/hlrad/x64/
+/hlvis/release/
+/hlvis/x64/
+/ripent/release/
+/ripent/x64/
