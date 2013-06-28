@@ -20,7 +20,6 @@ hlcsg_:
 	$(LIBRARIES_DIR)bspfile.cpp \
 	$(LIBRARIES_DIR)cmdlib.cpp \
 	$(LIBRARIES_DIR)filelib.cpp \
-	$(LIBRARIES_DIR)files.cpp \
 	$(LIBRARIES_DIR)log.cpp \
 	$(LIBRARIES_DIR)mathlib.cpp \
 	$(LIBRARIES_DIR)messages.cpp \
@@ -48,7 +47,6 @@ hlbsp_:
 	$(LIBRARIES_DIR)bspfile.cpp \
 	$(LIBRARIES_DIR)cmdlib.cpp \
 	$(LIBRARIES_DIR)filelib.cpp \
-	$(LIBRARIES_DIR)files.cpp \
 	$(LIBRARIES_DIR)log.cpp \
 	$(LIBRARIES_DIR)mathlib.cpp \
 	$(LIBRARIES_DIR)messages.cpp \
@@ -73,7 +71,6 @@ hlvis_:
 	$(LIBRARIES_DIR)bspfile.cpp \
 	$(LIBRARIES_DIR)cmdlib.cpp \
 	$(LIBRARIES_DIR)filelib.cpp \
-	$(LIBRARIES_DIR)files.cpp \
 	$(LIBRARIES_DIR)log.cpp \
 	$(LIBRARIES_DIR)mathlib.cpp \
 	$(LIBRARIES_DIR)messages.cpp \
@@ -93,7 +90,6 @@ hlrad_:
 	$(LIBRARIES_DIR)bspfile.cpp \
 	$(LIBRARIES_DIR)cmdlib.cpp \
 	$(LIBRARIES_DIR)filelib.cpp \
-	$(LIBRARIES_DIR)files.cpp \
 	$(LIBRARIES_DIR)log.cpp \
 	$(LIBRARIES_DIR)mathlib.cpp \
 	$(LIBRARIES_DIR)messages.cpp \
