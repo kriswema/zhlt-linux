@@ -33,7 +33,6 @@ hlcsg_:
 	$(HLCSG_DIR)brushunion.cpp \
 	$(HLCSG_DIR)hullfile.cpp \
 	$(HLCSG_DIR)map.cpp \
-	$(HLCSG_DIR)netvis_in_vis.cpp \
 	$(HLCSG_DIR)properties.cpp \
 	$(HLCSG_DIR)qcsg.cpp \
 	$(HLCSG_DIR)textures.cpp \
