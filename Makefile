@@ -111,7 +111,7 @@ hlrad_:
 	$(HLRAD_DIR)vismatrixutil.cpp
 
 clean:
-	rm -rf build
+	@rm -fRv $(BINARIES_DIR)
 
 install:
 	cp $(BINARIES_DIR)* $(GLOBAL_BINARIES_DIR)
